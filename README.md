@@ -33,10 +33,11 @@ motivation:
 
 近期一定会有人把adam做到test time training(试过,不太work,猜想momentum沿着chunk更新受num chunk影响)
 所以用muon(https://github.com/KellerJordan/modded-nanogpt ## speedrun nanogpt, 唯一一个干掉adamw的optimizer)做grad refine,本质上是对梯度做一定程度的正交化,参考(https://spaces.ac.cn/archives/10592) ##苏剑林解析
-grad = zeropower_via_newtonschulz5(grad) 
-
+titan-muon很简单
 
 ```python 
+grad = zeropower_via_newtonschulz5(grad) ## 对每个chunk的grad with shape (dim_in, dim_out),独立做正交化(adamw反之要跨chunk)
+ 
 def zeropower_via_newtonschulz5(G, steps=5, eps=1e-7):
     """
     使用 Newton-Schulz 迭代计算矩阵的零次方/正对化。
